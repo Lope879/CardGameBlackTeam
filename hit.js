@@ -1,40 +1,48 @@
+const player = new Player();
+const dealer = new Player();
+let deck = []; // Deck of cards
+let status = "playing"; // Game status
+
 function playerHit() {
   const card = deck.pop();
-  playerHand.push(card);  
-  playerSum = getHandVal(playerHand);
-  if (playerSum == 21) {
+  player.takeCard(card);  
+  
+  if (player.hasBlackjack()) {
     status = "won";
   }
-  else if (sum > 21) {
+  else if (player.isBusted()) {
     status = "lost, player bust"; 
+  }
+  
+  return status;
 }
 
-function stand() { // if player stands dealer takes turn
-  dealerHit(); 
-  return status; 
-}
+function stand() {
+  // Player decides to stand, so dealer takes their turn
+  dealerHit();
   
+  return status;
+}
+
 function dealerHit() {
   const card = deck.pop(); 
-  dealerHand.push(card); 
-  dealerSum = handVal(dealerHand); 
+  dealer.takeCard(card); 
   
-  while (dealerSum < 17) { // dealer hits aslong as <17 
-    const newCard = deck.pop(); 
-    dealerHand.push(card); 
-    dealerSum = handVal(dealerHand); 
+  while (dealer.getHandValue() < 17) { // dealer hits aslong as <17 
+    const newCard = deck.pop();
+    dealer.takeCard(newCard); 
   }
   
-  if (dealerSum == playerSum) { // tie game 
+  if (dealer.getHandValue() == player.getHandValue()) { // tie game 
     status = "tie"; 
   }
-  else if (dealerSum > 21) { // dealer busted 
+  else if (dealer.isBusted()) { // dealer busted 
     status = "won, dealer bust"; 
   }
-  else if (playerSum > dealerSum) { // if dealers hand is stronger than players 
-    status = "dealer lost"; 
-  }  
-  else if (playerSum < dealerSum) { // if dealers hand is stronger than players 
+  else if (player.getHandValue() < dealer.getHandValue()) { // if dealers hand is stronger than players 
     status = "player lost"; 
+  }
+  else {
+    status = "player won";
   }
 }
