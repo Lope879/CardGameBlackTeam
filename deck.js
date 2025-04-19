@@ -32,7 +32,6 @@ class Card {
          * builds the deck, adds Card objects to cards[]
          */
         this.build();
-        this.shuffle();
     }
     
 
